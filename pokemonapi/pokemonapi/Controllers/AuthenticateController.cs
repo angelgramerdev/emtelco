@@ -36,13 +36,15 @@ namespace pokemonapi.Controllers
             try
             {
 
-                _logger.LogWarning("metodo Register en ejecucion");
+                
                 var response = await _authenticateService.CreateIdentity(identity);
+                _logger.LogWarning("Se creó un nuevo usuario");
                 return Ok(response);
             }
             catch (Exception e)
             {
                 var response = await _objResponse.GetBadResponse();
+                _logger.LogError("Fallo la creacion del usuario");
                 return Ok(response);
             }
         }
@@ -53,13 +55,14 @@ namespace pokemonapi.Controllers
         public async Task<IActionResult> Authenticate(ObjIdentity identity) 
         {
             try 
-            {
-                _logger.LogWarning("metodo Authenticate en ejecucion");
+            {               
                 var result =await _tokenService.GetToken(identity);
+                _logger.LogWarning("Usuario autenticado");
                 return Ok(new {token=result });
             }
             catch (Exception e) 
-            { 
+            {
+                _logger.LogWarning("Usuario o contraseña invalida");
                 return BadRequest();   
             }
         }

@@ -4,6 +4,7 @@ using domain.Interfaces;
 using domain.Interfaces.Repositories;
 using domain.Responses;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,18 +20,20 @@ namespace infraestructure.Repositories
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IObjResponse _objResponse;
+        private readonly ILogger<AuthenticateRepository> _logger;
 
         public AuthenticateRepository(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
-            IObjResponse objResponse
-
+            IObjResponse objResponse,
+            ILogger<AuthenticateRepository> logger
 
             )
         {
             _objResponse = objResponse;
             _userManager = userManager;
             _signInManager = signInManager;
+            _logger = logger;
         }
 
         public async Task<ObjResponsePokemon> GetToken(ObjIdentity identity)
@@ -43,12 +46,14 @@ namespace infraestructure.Repositories
                 {
                     response = await _objResponse.GetGoodResponse();
                     response.IsAuthenticated = true;
+                    _logger.LogWarning("Se autentico el usuario");
                     return response;
                 }
                 else 
                 { 
                     response= await _objResponse.GetBadResponse();
                     response.IsAuthenticated = false;
+                    _logger.LogWarning("Usuario o contraseña invalidos");
                     return response;
                 }
             }
@@ -79,16 +84,18 @@ namespace infraestructure.Repositories
                             errors += error.Description + ";";
                         }
                         var response = await _objResponse.GetBadResponse();
+                        _logger.LogError(errors);
                         return response;
                     }
                     else
                     {
+                        _logger.LogWarning("Se creo un usuario");
                         return await _objResponse.GetGoodResponse();
                     }
                 }          
             catch (Exception e)
             {
-
+                _logger.LogError("Se presento un error en la creacion del usuario");
                 return await _objResponse.GetBadResponse();
             }
         }

@@ -2,6 +2,7 @@
 using domain.Entities;
 using domain.Interfaces.Repositories;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -18,13 +19,16 @@ namespace application.Services
     {
 
         private readonly IConfiguration _config;
+        private readonly ILogger<TokenService> _logger;
         private readonly IAuthenticateRepository<ObjIdentity> _authenticateRepository;
 
         public TokenService(IConfiguration config, 
-            IAuthenticateRepository<ObjIdentity> authenticateRepository) 
+            IAuthenticateRepository<ObjIdentity> authenticateRepository, 
+            ILogger<TokenService> logger) 
         { 
             _config = config;
             _authenticateRepository = authenticateRepository;
+            _logger = logger;
         }   
         
         public async Task<string> GetToken(ObjIdentity identity)
@@ -43,11 +47,12 @@ namespace application.Services
                     var securityToken = new JwtSecurityToken(claims: claims, expires: DateTime.Now.AddMinutes(60), signingCredentials: credentials);
 
                     string token = new JwtSecurityTokenHandler().WriteToken(securityToken);
-
+                    _logger.LogWarning("Se genero un token");
                     return await Task.FromResult(token);
                 }
                 else 
                 {
+                    _logger.LogError("usuario o contraseña invalidos");
                     return "unauthorized";
                 }
                 

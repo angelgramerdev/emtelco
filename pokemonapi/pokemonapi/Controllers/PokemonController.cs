@@ -26,13 +26,15 @@ namespace pokemonapi.Controllers
         {
             try 
             {
-                _logger.LogWarning("metodo GetPokemon en ejecucion");
+                
                 string name = HttpContext.Request.RouteValues["pokemon"].ToString();
                 var result=await _pokemonService.GetPokemon(name);
+                _logger.LogWarning("metodo GetPokemon ejecutado");
                 return Ok(result);  
             }
             catch (Exception ex) 
-            { 
+            {
+                _logger.LogError("Se presento un error o no se encontro informacion");
                 return BadRequest();  
             }
         

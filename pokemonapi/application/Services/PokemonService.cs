@@ -4,6 +4,7 @@ using domain.Entities;
 using domain.Interfaces.Repositories;
 using domain.Responses;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,11 +18,16 @@ namespace application.Services
         
         private readonly IPokemonRepository<Pokemon> _pokemonRepository;
         private readonly IObjResponse _objResponse;
-        
-        public PokemonService(IPokemonRepository<Pokemon> pokemonRepository, IObjResponse objResponse) 
+        private readonly ILogger<PokemonService> _logger;
+
+        public PokemonService(IPokemonRepository<Pokemon> pokemonRepository, 
+            IObjResponse objResponse,
+            ILogger<PokemonService> logger
+            ) 
         {
             _pokemonRepository = pokemonRepository;  
             _objResponse = objResponse;
+            _logger = logger;
         }
 
         public async Task<ObjResponsePokemon> GetPokemon(string name)
@@ -41,12 +47,14 @@ namespace application.Services
                 }
                 result.Pokemon.Habilities = null;
                 result.Habilidades = new Habilidades();
-                result.Habilidades.Ocultas = ocultas;   
+                result.Habilidades.Ocultas = ocultas;
+                _logger.LogWarning("se consulto un pokemon");
                 return result;  
             }
             catch(Exception e) 
             { 
-                var result=await _objResponse.GetBadResponse(); 
+                var result=await _objResponse.GetBadResponse();
+                _logger.LogError("Se presento un error");
                 return result; 
             }   
         }
