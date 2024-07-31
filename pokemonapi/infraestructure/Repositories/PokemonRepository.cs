@@ -68,5 +68,25 @@ namespace infraestructure.Repositories
                 return habilities = new List<Hability>();  
             }
         }
+
+        public async Task<ObjResponsePokemon> CreatePokemon(Pokemon pokemon)
+        {
+            try 
+            {
+              var result=await _context.Pokemons.AddAsync(pokemon);
+              await _context.SaveChangesAsync();
+              var response=await _objResponse.GetGoodResponse();
+              response.Pokemon = result.Entity;
+              _logger.LogWarning("Se creo un pokemon");
+                return response;    
+            
+            }
+            catch (Exception ex) 
+            { 
+                _logger.LogError("fallo la creacion del pokemon");  
+                return await _objResponse.GetBadResponse(); 
+            }
+        }
+
     }
 }

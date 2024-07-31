@@ -76,6 +76,8 @@ try
     builder.Services.AddScoped<ITokenService, TokenService>();
     builder.Services.AddScoped<IAuthenticateService, AuthenticateService>();
     builder.Services.AddScoped<IAuthenticateRepository<ObjIdentity>, AuthenticateRepository>();
+    builder.Services.AddScoped<IHabilityService, HabilityService>();
+    builder.Services.AddScoped<IHabilityRepository<Hability>, HabilityRepository>();
     builder.Services.AddDbContext<PokemonContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("conexionSql")));
     builder.Services.AddDefaultIdentity<IdentityUser>()
         .AddEntityFrameworkStores<PokemonContext>();

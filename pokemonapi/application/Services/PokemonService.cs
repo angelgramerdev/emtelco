@@ -30,6 +30,23 @@ namespace application.Services
             _logger = logger;
         }
 
+        public async Task<ObjResponsePokemon> CreatePokemon(Pokemon pokemon)
+        {
+            try 
+            { 
+                pokemon.CreationDate = DateTime.Now;
+                var result=await _pokemonRepository.CreatePokemon(pokemon);
+                _logger.LogWarning("Se creo un pokemon");
+                return result;  
+            }
+            catch(Exception e) 
+            {
+                _logger.LogError("Fallo la creacion del pokemon");
+                return await _objResponse.GetGoodResponse();
+            
+            }   
+        }
+
         public async Task<ObjResponsePokemon> GetPokemon(string name)
         {
             try 

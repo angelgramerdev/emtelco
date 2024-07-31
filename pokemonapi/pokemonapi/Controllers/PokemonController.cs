@@ -1,4 +1,5 @@
 ﻿using application.Interfaces;
+using domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +27,6 @@ namespace pokemonapi.Controllers
         {
             try 
             {
-                
                 string name = HttpContext.Request.RouteValues["pokemon"].ToString();
                 var result=await _pokemonService.GetPokemon(name);
                 _logger.LogWarning("metodo GetPokemon ejecutado");
@@ -38,6 +38,25 @@ namespace pokemonapi.Controllers
                 return BadRequest();  
             }
         
+        }
+
+        [HttpPost]
+        [Authorize]
+        [Route("Create_Pokemon")]
+        public async Task<IActionResult> CreatePokemon(Pokemon pokemon) 
+        {
+            try 
+            { 
+             var result=await _pokemonService.CreatePokemon(pokemon);
+             _logger.LogWarning("Se creo un pokemon");  
+             return Ok(result);    
+            
+            }
+            catch (Exception ex) 
+            { 
+                _logger.LogError("Fallo la creacion del pokemon");
+                return BadRequest();
+            }
         }
     
     }

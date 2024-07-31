@@ -12,7 +12,7 @@ namespace domain.Entities
         public string Name { get; set; }
         public bool IsHidden { get; set; }
         public int PokemonId { get; set; }
-        public virtual Pokemon Pokemon { get; set; }
+        public virtual Pokemon? Pokemon { get; set; }
 
     }
 }

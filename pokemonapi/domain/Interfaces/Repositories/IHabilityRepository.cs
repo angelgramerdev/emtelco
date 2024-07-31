@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace domain.Interfaces.Repositories
 {
-    public interface IPokemonRepository<TEntity>:IGetPokemon,
-        IGetHabilities,ICreatePokemon<TEntity>
+    public interface IHabilityRepository<TEntity>:ICreateHability<TEntity>
     {
     }
 }

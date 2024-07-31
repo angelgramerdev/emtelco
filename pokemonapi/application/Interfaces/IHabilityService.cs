@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace application.Interfaces
 {
-    public interface IPokemonService
+    public interface IHabilityService
     {
-        Task<ObjResponsePokemon> GetPokemon(string name);
-        Task<ObjResponsePokemon> CreatePokemon(Pokemon pokemon);
+        Task<ObjResponseHability> CreateHability(Hability hability);
     }
 }

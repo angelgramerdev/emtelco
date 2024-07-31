@@ -28,6 +28,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\application\application.csproj" />
+    <ProjectReference Include="..\domain\domain.csproj" />
     <ProjectReference Include="..\infraestructure\infraestructure.csproj" />
   </ItemGroup>
 
