@@ -84,9 +84,11 @@ try
 
     builder.Services.AddCors(options =>
     {
-        options.AddPolicy("devCorsPolicy", builder => {
-            builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-        });
+        options.AddPolicy(name: "devCorsPolicy",
+                          policy =>
+                          {
+                              policy.WithOrigins("https://localhost", "http://localhost");
+                          });
     });
 
     builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
