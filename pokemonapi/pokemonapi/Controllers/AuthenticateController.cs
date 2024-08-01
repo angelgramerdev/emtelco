@@ -35,8 +35,7 @@ namespace pokemonapi.Controllers
         {
             try
             {
-
-                
+             
                 var response = await _authenticateService.CreateIdentity(identity);
                 _logger.LogWarning("Se creó un nuevo usuario");
                 return Ok(response);
